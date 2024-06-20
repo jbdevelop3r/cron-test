@@ -2,10 +2,17 @@
 <h1>Update Job Schedule</h1>
 <%= form_with(url: update_schedule_path, method: :post, local: true) do %>
   <div>
+    <%= label_tag :name, "Name of Schedule" %>
+    <%= text_field_tag :name %>
+  </div>
+
+  <div>
     <%= label_tag :interval, "Interval in minutes" %>
     <%= text_field_tag :interval %>
   </div>
   <div>
-    <%= submit_tag "Update Schedule" %>
-  </div>
-<% end %>
+
+    <div>
+      <%= submit_tag "Update Schedule" %>
+    </div>
+  <% end %>
