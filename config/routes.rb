@@ -4,8 +4,17 @@ Rails.application.routes.draw do
 
   mount Sidekiq::Web => '/sidekiq'
   
-  get 'schedule/edit', to: 'schedules#edit', as: 'edit_schedule'
+  # get 'schedule/edit', to: 'schedules#edit', as: 'edit_schedule'
   post 'schedule/update', to: 'schedules#update', as: 'update_schedule'
+  # get 'schedules', to: 'schedules#index', as: 'index_schedule'
+
+  resources :schedules do 
+    member do 
+      patch :disable_job
+      patch :enable_job
+    end
+  end
+
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

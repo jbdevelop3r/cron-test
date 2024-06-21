@@ -1,0 +1,8 @@
+<% @schedules.each do |sched| %>
+  <div>
+    <p>Name: <%= sched.name %> </p>
+    <p>Interval: <%= sched.interval %> </p>
+    <p>Status: <%= sched.active %> </p>
+    <p>Show Schedule: <%= link_to "Show", schedule_path(sched)%> </p>
+  </div>
+<% end %>
