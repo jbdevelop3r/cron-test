@@ -1,18 +1,18 @@
 <!-- app/views/schedules/edit.html.erb -->
 <h1>Update Job Schedule</h1>
-<%= form_with(url: update_schedule_path, method: :post, local: true) do %>
+<%= form_with(model: @schedule, local: true) do |form| %>
   <div>
-    <%= label_tag :name, "Name of Schedule" %>
-    <%= text_field_tag :name %>
+    <%= form.label :name, "Name of Schedule" %>
+    <%= form.text_field :name %>
   </div>
 
   <div>
-    <%= label_tag :interval, "Interval in minutes" %>
-    <%= text_field_tag :interval %>
+    <%= form.label :interval, "Interval in minutes" %>
+    <%= form.text_field :interval %>
   </div>
-  <div>
 
-    <div>
-      <%= submit_tag "Update Schedule" %>
-    </div>
-  <% end %>
+  <div>
+    <%= form.hidden_field :id %>
+    <%= form.submit "Update Schedule" %>
+  </div>
+<% end %>

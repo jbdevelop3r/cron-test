@@ -1,0 +1,19 @@
+<p> Schedule name: <%= @schedule.name %> </p>
+<p> Interval <%= @schedule.interval %> </p>
+<p> Active <%= @schedule.active %> </p>
+
+<p> <%= link_to "Edit", edit_schedule_path(@schedule) %> </p>
+
+<% if @schedule.active %>
+  <%= form_with(url: disable_job_schedule_path(@schedule.id), method: :patch) do |form| %>
+    <%= form.hidden_field :id, value: @schedule.id %>
+    <%= submit_tag "Deactivate" %>
+  <% end %>
+<% end %>
+
+<% if !@schedule.active %>
+  <%= form_with(url: enable_job_schedule_path(@schedule.id), method: :patch) do |form| %>
+    <%= form.hidden_field :id, value: @schedule.id %>
+    <%= submit_tag "Activate" %>
+  <% end %>
+<% end %>
