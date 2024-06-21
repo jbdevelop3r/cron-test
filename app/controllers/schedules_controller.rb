@@ -12,22 +12,30 @@ class SchedulesController < ApplicationController
   end
 
   def update
-    interval = params[:schedule][:interval].to_i
+    @schedule = Schedule.find(params[:id])
+    interval = params[:schedule][:minutes].to_i
     sched_name = params[:schedule][:name]
-    cron_expression = "*/#{interval} * * * *"
-    
-    @sched = Schedule.find(params[:id])
-
-    job = Sidekiq::Cron::Job.find(sched_name)
+    start_time = params[:schedule][:start_time]
+    end_time = params[:schedule][:end_time]
+    hour = params[:schedule][:hour]
+    minutes = params[:schedule][:minutes].to_i
+    cron_expression = "*/#{minutes.to_s} #{start_time}-#{end_time} * * *"
+    job = Sidekiq::Cron::Job.find(@schedule.name)
     if job
-      existing_job = Schedule.find_by(name: job.name)
-      existing_job.destroy if existing_job
+      if @schedule.update(schedule_params.except(:active))
+        puts "nice"
+      end
       job.destroy
     end
     Sidekiq::Cron::Job.create(name: sched_name, cron: cron_expression, class: 'MyWorker')
-    Schedule.create(name: sched_name, interval: interval, active: true)
-    
-    
+    new_job = Sidekiq::Cron::Job.find(@schedule.name)
+    if  @schedule.active == false  
+      new_job.disable!
+      @schedule.update(active: false)
+    else 
+      new_job.enable!
+      @schedule.update(active: true)
+    end
     redirect_to schedules_path, notice: "Schedule updated to every #{interval} minutes."
   end
 
@@ -44,10 +52,11 @@ class SchedulesController < ApplicationController
     @job = Sidekiq::Cron::Job.find(@schedule.name)
     @job.destroy
     @schedule = Schedule.find(params[:id])
-    cron_expression = "*/#{@schedule.interval} * * * *"
+    cron_expression = "*/#{@schedule.minutes} #{@schedule.start_time}-#{@schedule.end_time} * * *"
     new_running_job = Sidekiq::Cron::Job.create(name: @schedule.name, cron: cron_expression, class: 'MyWorker')
-    new_created_schedule = Schedule.create(name: @schedule.name, interval: @schedule.interval, active: true)
-    @schedule.destroy
+    if @schedule.update(active: true)
+      puts "updated"
+    end
     redirect_to schedules_path
   end
   
@@ -56,5 +65,9 @@ class SchedulesController < ApplicationController
 
   def set_schedule 
     @schedule = Schedule.find(params[:id])
+  end
+
+  def schedule_params 
+    params.require(:schedule).permit(:name, :interval, :active, :start_time, :end_time, :hour, :minutes)
   end
 end

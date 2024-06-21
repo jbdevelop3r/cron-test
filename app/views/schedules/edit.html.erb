@@ -12,6 +12,26 @@
   </div>
 
   <div>
+    <%= form.label :start_time, "Start Time" %>
+    <%= form.text_field :start_time %>
+  </div>
+
+  <div>
+    <%= form.label :end_time, "End Time" %>
+    <%= form.text_field :end_time %>
+  </div>
+
+  <div>
+    <%= form.label :hour, "Hour" %>
+    <%= form.text_field :hour %>
+  </div>
+
+  <div>
+    <%= form.label :minutes, "Minutes" %>
+    <%= form.text_field :minutes %>
+  </div>
+
+  <div>
     <%= form.hidden_field :id %>
     <%= form.submit "Update Schedule" %>
   </div>

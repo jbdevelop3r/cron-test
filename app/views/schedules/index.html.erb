@@ -3,6 +3,10 @@
     <p>Name: <%= sched.name %> </p>
     <p>Interval: <%= sched.interval %> </p>
     <p>Status: <%= sched.active %> </p>
+    <p>Start Time: <%= sched.start_time %> </p>
+    <p>End Time: <%= sched.end_time %> </p>
+    <p>Hour: <%= sched.hour %> </p>
+    <p>Minute: <%= sched.minutes %> </p>
     <p>Show Schedule: <%= link_to "Show", schedule_path(sched)%> </p>
   </div>
 <% end %>
