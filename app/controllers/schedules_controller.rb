@@ -1,5 +1,5 @@
 class SchedulesController < ApplicationController
-  before_action :set_schedule, except: [:update, :index]
+  before_action :set_schedule, except: [:index]
 
   def index 
     @schedules = Schedule.all
@@ -12,30 +12,15 @@ class SchedulesController < ApplicationController
   end
 
   def update
-    @schedule = Schedule.find(params[:id])
+    sched_params = schedule_params
+    schedule = @schedule
     interval = params[:schedule][:minutes].to_i
     sched_name = params[:schedule][:name]
     start_time = params[:schedule][:start_time]
     end_time = params[:schedule][:end_time]
     hour = params[:schedule][:hour]
     minutes = params[:schedule][:minutes].to_i
-    cron_expression = "*/#{minutes.to_s} #{start_time}-#{end_time} * * *"
-    job = Sidekiq::Cron::Job.find(@schedule.name)
-    if job
-      if @schedule.update(schedule_params.except(:active))
-        puts "nice"
-      end
-      job.destroy
-    end
-    Sidekiq::Cron::Job.create(name: sched_name, cron: cron_expression, class: 'MyWorker')
-    new_job = Sidekiq::Cron::Job.find(@schedule.name)
-    if  @schedule.active == false  
-      new_job.disable!
-      @schedule.update(active: false)
-    else 
-      new_job.enable!
-      @schedule.update(active: true)
-    end
+    update_schedule = Scheduler::UpdateJobService.update_schedule(schedule, interval, sched_name, start_time, end_time, hour, minutes,sched_params)
     redirect_to schedules_path, notice: "Schedule updated to every #{interval} minutes."
   end
 
@@ -70,4 +55,5 @@ class SchedulesController < ApplicationController
   def schedule_params 
     params.require(:schedule).permit(:name, :interval, :active, :start_time, :end_time, :hour, :minutes)
   end
+  
 end

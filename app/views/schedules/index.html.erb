@@ -1,7 +1,7 @@
 <% @schedules.each do |sched| %>
   <div>
     <p>Name: <%= sched.name %> </p>
-    <p>Interval: <%= sched.interval %> </p>
+    <p>Interval: <%= sched.minutes %> </p>
     <p>Status: <%= sched.active %> </p>
     <p>Start Time: <%= sched.start_time %> </p>
     <p>End Time: <%= sched.end_time %> </p>
@@ -9,4 +9,35 @@
     <p>Minute: <%= sched.minutes %> </p>
     <p>Show Schedule: <%= link_to "Show", schedule_path(sched)%> </p>
   </div>
+<% end %>
+
+<% if false %>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Interval</th>
+      <th>Status</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Hour</th>
+      <th>Minutes</th>
+      <th>Show</th>
+    </tr>
+    <tbody>
+      <% @schedules.each do |sched| %>
+        <tr>
+          <td><%= sched.name %></td>
+          <td><%= sched.interval %> </td>
+          <td> <%= sched.active %></td>
+          <td><%= sched.start_time %> </td>
+          <td> <%= sched.end_time %> </td>
+          <td> <%= sched.hour %></td>
+          <td> <%= sched.minutes %></td>
+          <td><%= link_to "Show", schedule_path(sched)%>  </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
 <% end %>
