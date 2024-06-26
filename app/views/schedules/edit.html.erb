@@ -1,5 +1,5 @@
 <!-- app/views/schedules/edit.html.erb -->
-<h1>Update Job Schedule</h1>
+<h3>Update Job Schedule</h3>
 <%= form_with(model: @schedule, local: true) do |form| %>
   <div>
     <%= form.label :name, "Name of Schedule" %>
@@ -36,3 +36,5 @@
     <%= form.submit "Update Schedule" %>
   </div>
 <% end %>
+<br>
+<%= link_to "Home", schedules_path %>

@@ -70,4 +70,7 @@ gem 'sidekiq', '~> 7.2', '>= 7.2.4'
 
 gem "sidekiq-cron"
 
+gem 'paper_trail'
+
+gem 'devise', '~> 4.9', '>= 4.9.4'
 
